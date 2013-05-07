@@ -27,7 +27,7 @@ class QQAPIModel  extends parentModel {
 
 			
 		);
-		$sdk->setServerName('119.147.19.43');
+		$sdk->setServerName('openapi.tencentyun.com');
 		return $sdk->api($script_name, $params, 'post', 'http');
 	}
 	
@@ -71,7 +71,7 @@ class QQAPIModel  extends parentModel {
 		 $pf = 'qzone';
 		 $userinfo =  self::get_user_info($sdk, $openid, $openkey, $pf,$config['appid'],$config['appkey']);
 		 
-		 if($userinfo['is_lost'] ==0){
+		 if($userinfo['ret'] ==0){
 		 	 self::update_user_info($userinfo,$openid); //更新用户信息
 		 	 return $userinfo ;
 		 }else{
@@ -93,9 +93,10 @@ class QQAPIModel  extends parentModel {
 				'country' => $userinfo['country'],
 				'province' => $userinfo['province'],
 				'city' => $userinfo['city'],
-				'figureurl' => $userinfo['figureurl']
+				'figureurl' => $userinfo['figureurl'],
+				'createdtimestamp'=>date("Y/m/d H:i:s")
 			);
-			self::getInstace()->db->insert('fevent_user_info', $data);
+			$sqlresult =self::getInstace()->db->insert('fevent_user_info', $data);
 		} else {
 			$data = array (
 				'openid' => $openid,
@@ -106,8 +107,9 @@ class QQAPIModel  extends parentModel {
 				'city' => $userinfo['city'],
 				'figureurl' => $userinfo['figureurl']
 			);
-			self::getInstace()->db->update('fevent_user_info', $data, ' infoid = "' . $infoid . '"');
+		 $sqlresult =self::getInstace()->db->update('fevent_user_info', $data, ' infoid = ' . $infoid . '');
 		}
+		return $sqlresult;
 	}
 	
 	//查询用户信息 
