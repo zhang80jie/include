@@ -17,8 +17,8 @@ class groupModel extends parentModel{
 			'group_created_by'=>$group_created_by
 		);
 		$result= $this->db->insert('fevent_group', $data);
-		if($result){
-			joinGroupWhenCreate($group_created_by);			
+		if($result>0){
+			self::joinGroupWhenCreate($group_created_by);			
 		}
 		return $result;
 		
