@@ -71,14 +71,14 @@ class QQAPIModel  extends parentModel {
 		 $pf = 'qzone';
 		 $userinfo =  self::get_user_info($sdk, $openid, $openkey, $pf,$config['appid'],$config['appkey']);
 		 
+		 
+	    
 		 if($userinfo['ret'] ==0){
-		 	 self::update_user_info($userinfo,$openid); //更新用户信息
-		 	 return $userinfo ;
-		 }else{
-		 	return  self::get_user_info_by_openid($openid) ;
-		 }
-		
-	 
+		 	     self::update_user_info($userinfo,$openid); //更新用户信息
+			 }else{
+		    	$userinfo=  self::get_user_info_by_openid($openid) ;
+			 }
+		 return $userinfo ;
 	}
 	
 	
@@ -115,7 +115,7 @@ class QQAPIModel  extends parentModel {
 	//查询用户信息 
 	 function get_user_info_by_openid($openid){
 		$sql ="select u.nickname,u.gender,u.country,u.province,u.city,u.figureurl from fevent_user_info u where u.openid='".$openid."'";
-		return  self::getInstace()->db->fetchOne($sql);
+		return  self::getInstace()->db->fetchRow($sql);
 	}
 	
 	//查询是否已记录了用户信息
