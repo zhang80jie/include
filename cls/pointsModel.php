@@ -69,7 +69,7 @@ class pointsModel extends parentModel {
 	 * 用户积分排行榜
 	 */
 	public function getPointList($limit = 10) {
-		$sql = 'select point_id, openid,points from fevent_points  order by points desc limit ' . $limit;
+		$sql =" select p.point_id, p.openid,p.points,ifnull(u.nickname,'未来大事件')as nickname from fevent_points p left join fevent_user_info u on p.openid=u.openid order by p.points desc limit " . $limit;
 		return $this->db->fetchAll($sql);
 	}
 
@@ -127,7 +127,7 @@ class pointsModel extends parentModel {
 	 * 获取要推广的群组信息
 	 */
 	public function getGroupExtendedList($limit = 10) {
-		$sql = "select g.group_id ,g.group_name from fevent_group_point gp1,fevent_group_point gp2 ,fevent_group g where gp1.group_point_id=gp2.group_point_id and gp1.group_id=g.group_id and gp1.group_points>gp2.group_points_used  limit " . $limit;
+		$sql = "select distinct(g.group_id) ,g.group_name from fevent_group_point gp1,fevent_group_point gp2 ,fevent_group g where gp1.group_point_id=gp2.group_point_id and gp1.group_id=g.group_id and gp1.group_points>gp2.group_points_used  limit " . $limit;
 		return $this->db->fetchAll($sql);
 	}
 
